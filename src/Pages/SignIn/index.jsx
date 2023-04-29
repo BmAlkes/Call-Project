@@ -1,7 +1,7 @@
 import "./signin.css";
 import logo from "../../assets/logo.png";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth";
 import { toast } from "react-toastify";
 
@@ -9,12 +9,14 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user, signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (email !== "" && password !== "") {
-      signIn(email, password);
+      await signIn(email, password);
       toast.success("Sucess Logged");
+      navigate("/dashboard");
     }
   };
 
