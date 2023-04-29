@@ -1,20 +1,39 @@
 import "./signup.css";
 import logo from "../../assets/logo.png";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../context/auth";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+
+  const { signUp, loadingAuth } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (name !== "" && password !== "" && email !== "") {
+      await signUp(email, password, name);
+      toast.success("Register success");
+      navigate("/dashboard");
+    } else {
+      toast.error("Please fill the files");
+    }
+  };
+
   return (
     <div className="container-center">
       <div className="login">
         <div className="area">
           <img src={logo} alt="logo do sistema" />
         </div>
-        <form>
-          <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+          <h1>Register</h1>
           <input
             type="text"
             placeholder="Name"
@@ -33,9 +52,11 @@ const SignUp = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Enter</button>
+          <button type="submit">
+            {loadingAuth ? "Loading..." : "Register "}
+          </button>
         </form>
-        <Link to="/"> Have already a account</Link>
+        <Link to="/"> Have already a account?</Link>
       </div>
     </div>
   );
