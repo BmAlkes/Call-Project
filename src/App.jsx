@@ -5,6 +5,7 @@ import Dashboard from "./Pages/Dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Private from "./routes/Private";
+import Profile from "./Pages/Profile";
 
 const App = () => {
   return (
@@ -19,6 +20,14 @@ const App = () => {
             element={
               <Private>
                 <Dashboard />
+              </Private>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Private>
+                <Profile />
               </Private>
             }
           />

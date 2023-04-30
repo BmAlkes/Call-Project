@@ -10,7 +10,6 @@ const Header = () => {
   const handleLogout = () => {
     logout();
   };
-  console.log(user);
   return (
     <div className="sidebar">
       <div className="avatar">
