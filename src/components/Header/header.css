@@ -55,7 +55,7 @@
   }
 }
 
-.sidebar .menu button {
+.sidebar .menu .button {
   border: none;
   background: none;
   color: rgba(255, 255, 255, 0.9);
@@ -64,7 +64,7 @@
 }
 
 .menu a,
-.menu button {
+.menu .button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +80,7 @@
   background: #121212;
   color: #fff;
 }
-.menu button:hover {
+.menu .button:hover {
   width: 100%;
   background: #121212;
   color: #fff;
@@ -89,4 +89,10 @@
 .content {
   margin-left: 250px;
   padding: 1px 16px;
+}
+
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+  }
 }

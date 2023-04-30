@@ -31,7 +31,7 @@ const Header = () => {
           <FiSettings color="#fff" size={24} />
           Profile
         </Link>
-        <button onClick={handleLogout}>
+        <button onClick={handleLogout} className="button">
           <FiLogOut color="#fff" size={24} />
           Logout
         </button>
