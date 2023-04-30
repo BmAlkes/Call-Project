@@ -51,11 +51,14 @@
   }
 
   .sidebar .menu {
-    flex-direction: column;
+    flex-direction: row;
     height: auto;
   }
   .menu a {
     padding: 0.5rem;
+  }
+  .menu a svg {
+    display: none;
   }
 }
 
