@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 export const AuthContext = createContext({});
@@ -13,6 +14,19 @@ export const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadUser() {
+      const storageUser = localStorage.getItem("@ticketsPro");
+      if (storageUser) {
+        setUser(JSON.parse(storageUser));
+        setLoading(false);
+      }
+      setLoading(false);
+    }
+    loadUser();
+  }, []);
 
   async function signIn(email, password) {
     setLoadingAuth(true);
@@ -30,6 +44,7 @@ export const AuthProvider = ({ children }) => {
         };
         setUser(data);
         storageUser(data);
+        setLoadingAuth(false);
       }
     );
   }
@@ -66,6 +81,12 @@ export const AuthProvider = ({ children }) => {
   const storageUser = (data) => {
     localStorage.setItem("@ticketsPro", JSON.stringify(data));
   };
+
+  async function logout() {
+    await signOut(auth);
+    localStorage.removeItem("@ticketsPro");
+    setUser(null);
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -74,6 +95,8 @@ export const AuthProvider = ({ children }) => {
         signIn,
         signUp,
         loadingAuth,
+        loading,
+        logout,
       }}
     >
       {children}

@@ -4,6 +4,7 @@ import SignUp from "./Pages/SignUp";
 import Dashboard from "./Pages/Dashboard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Private from "./routes/Private";
 
 const App = () => {
   return (
@@ -13,7 +14,14 @@ const App = () => {
         <Routes>
           <Route path="/" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <Private>
+                <Dashboard />
+              </Private>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>

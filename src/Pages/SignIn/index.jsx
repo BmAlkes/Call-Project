@@ -15,7 +15,7 @@ const SignIn = () => {
     e.preventDefault();
     if (email !== "" && password !== "") {
       await signIn(email, password);
-      toast.success("Sucess Logged");
+      toast.success("Welcome to the app");
       navigate("/dashboard");
     }
   };
