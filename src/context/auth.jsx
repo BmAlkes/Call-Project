@@ -1,7 +1,6 @@
 import { useState, createContext, useEffect } from "react";
 import { auth, db } from "../config/dbfirebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,

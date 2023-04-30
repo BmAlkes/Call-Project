@@ -19,6 +19,9 @@ body {
 a {
   text-decoration: none;
 }
+a:visited {
+  color: rgba(225, 255, 255, 0.7);
+}
 ul {
   list-style: none;
 }

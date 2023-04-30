@@ -1,0 +1,87 @@
+.sidebar {
+  background-color: #181c2e;
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  width: 230px;
+}
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+}
+
+.avatar {
+  background: url("../../assets/logo.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 180px;
+  padding-top: 30px;
+}
+.sidebar .avatar img {
+  width: 120px;
+  height: 120px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: drop-shadow(12px 13px 6px #121212);
+}
+
+.sidebar .menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  transition: ease-in-out 0.4s;
+  height: 40vh;
+}
+
+@media screen and (max-width: 768px) {
+  .avatar {
+    height: 140px;
+    padding-top: 10px;
+  }
+
+  .sidebar .menu {
+    flex-direction: row;
+    height: auto;
+  }
+}
+
+.sidebar .menu button {
+  border: none;
+  background: none;
+  color: rgba(255, 255, 255, 0.9);
+  transition: ease-in-out 0.4s;
+  font-size: 1rem;
+}
+
+.menu a,
+.menu button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+}
+.menu svg {
+  margin-right: 15px;
+}
+
+.sidebar a:hover {
+  width: 100%;
+  background: #121212;
+  color: #fff;
+}
+.menu button:hover {
+  width: 100%;
+  background: #121212;
+  color: #fff;
+}
