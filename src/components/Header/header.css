@@ -12,6 +12,7 @@
     width: 100%;
     height: auto;
     position: relative;
+    padding: 0 1rem;
   }
 }
 
@@ -50,8 +51,11 @@
   }
 
   .sidebar .menu {
-    flex-direction: row;
+    flex-direction: column;
     height: auto;
+  }
+  .menu a {
+    padding: 0.5rem;
   }
 }
 

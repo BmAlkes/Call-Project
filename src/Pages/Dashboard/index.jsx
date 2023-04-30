@@ -10,7 +10,7 @@ const Dashboard = () => {
     logout();
   };
   return (
-    <div>
+    <div className="dashboard">
       <Header />
       Dashboard
       <button onClick={handleLogout}>logout</button>
