@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
         const docSnap = await getDoc(docRef);
         let data = {
           uid: uid,
-          nome: docSnap.data().name,
+          name: docSnap.data().name,
           email: value.user.email,
           avatarUrl: docSnap.data().avatarUrl,
         };
@@ -96,6 +96,8 @@ export const AuthProvider = ({ children }) => {
         loadingAuth,
         loading,
         logout,
+        storageUser,
+        setUser,
       }}
     >
       {children}
