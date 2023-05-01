@@ -14,16 +14,20 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../../config/dbfirebase";
+import { format } from "date-fns";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isEmpty, setIsEmpty] = useState(false);
 
+  console.log(tickets);
+
   useEffect(() => {
     async function loadTickets() {
       const listRef = collection(db, "tickets");
       const q = query(listRef, orderBy("created", "desc"), limit(5));
+      setTickets([]);
       const querySnapshot = await getDocs(q);
       await updatedState(querySnapshot);
       setLoading(false);
@@ -46,15 +50,30 @@ const Dashboard = () => {
           clientId: doc.data().clientId,
           created: doc.data().created,
           status: doc.data().status,
+          createdFormat: format(doc.data().created.toDate(), "dd/MM/yyyy"),
           complement: doc.data().complement,
         });
       });
-      setTickets((tickets) => [...tickets, list]);
+      setTickets((tickets) => [...tickets, ...list]);
     } else {
       setIsEmpty(true);
     }
   }
-
+  if (loading) {
+    return (
+      <div>
+        <Header />
+        <div className="content">
+          <Title name="Tickets">
+            <FiMessageSquare size={25} />
+          </Title>
+          <div className="container dashboard">
+            <span>Loading tickets....</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
       <Header />
@@ -88,30 +107,37 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td data-label="client">Bm</td>
-                  <td data-label="subjct">Support</td>
-                  <td data-label="status">
-                    <span className="badge" style={{ backgroundColor: "#999" }}>
-                      Open
-                    </span>
-                  </td>
-                  <td data-label="register">01/05/23</td>
-                  <td data-label="#">
-                    <button
-                      className="action"
-                      style={{ backgroundColor: "#3583f6" }}
-                    >
-                      <FiSearch color="#fff" size={17} />
-                    </button>
-                    <button
-                      className="action"
-                      style={{ backgroundColor: "#f6a935" }}
-                    >
-                      <FiEdit2 color="#fff" size={17} />
-                    </button>
-                  </td>
-                </tr>
+                {tickets.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td data-label="client">{item.client}</td>
+                      <td data-label="subjct">{item.subject}</td>
+                      <td data-label="status">
+                        <span
+                          className="badge"
+                          style={{ backgroundColor: "#999" }}
+                        >
+                          {item.status}
+                        </span>
+                      </td>
+                      <td data-label="register">{item.createdFormat}</td>
+                      <td data-label="#">
+                        <button
+                          className="action"
+                          style={{ backgroundColor: "#3583f6" }}
+                        >
+                          <FiSearch color="#fff" size={17} />
+                        </button>
+                        <button
+                          className="action"
+                          style={{ backgroundColor: "#f6a935" }}
+                        >
+                          <FiEdit2 color="#fff" size={17} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </>
