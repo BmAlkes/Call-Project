@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Private from "./routes/Private";
 import Profile from "./Pages/Profile";
 import Customers from "./Pages/Customers";
+import New from "./Pages/New";
 
 const App = () => {
   return (
@@ -37,6 +38,14 @@ const App = () => {
             element={
               <Private>
                 <Customers />
+              </Private>
+            }
+          />
+          <Route
+            path="/new"
+            element={
+              <Private>
+                <New />
               </Private>
             }
           />
