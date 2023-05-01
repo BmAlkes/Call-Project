@@ -20,9 +20,12 @@ form input[type="radio"]:not(:first-child) {
   align-items: center;
 }
 
-@media screen and(max-width: 768px) {
+@media (max-width: 768px) {
+  .status {
+    padding: 3px;
+  }
   .status label {
-    font-size: 0.85rem;
-    padding-left: 0.2em;
+    font-size: 1rem;
+    padding-left: 0.1em;
   }
 }
