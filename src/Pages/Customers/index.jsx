@@ -1,4 +1,3 @@
-import "./customers.css";
 import Header from "../../components/Header";
 import Title from "../../components/Title";
 import { FiUser } from "react-icons/fi";
