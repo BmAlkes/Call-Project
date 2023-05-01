@@ -44,6 +44,7 @@ const Profile = () => {
           let data = {
             ...user,
             nome: name,
+            avatarUrl: urlPicture,
           };
           setUser(data);
           storageUser(data);

@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Private from "./routes/Private";
 import Profile from "./Pages/Profile";
+import Customers from "./Pages/Customers";
 
 const App = () => {
   return (
@@ -28,6 +29,14 @@ const App = () => {
             element={
               <Private>
                 <Profile />
+              </Private>
+            }
+          />
+          <Route
+            path="/customer"
+            element={
+              <Private>
+                <Customers />
               </Private>
             }
           />
