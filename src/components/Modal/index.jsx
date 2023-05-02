@@ -27,7 +27,16 @@ const Modal = ({ content, close }) => {
           </div>
           <div className="row">
             <span>
-              status : <i>{content.status}</i>
+              status :{" "}
+              <i
+                style={{
+                  color: "#FFF",
+                  backgroundColor:
+                    content.status === "answered" ? "#5cb85c" : "#999",
+                }}
+              >
+                {content.status}
+              </i>
             </span>
           </div>
           <>

@@ -2,11 +2,19 @@ import "./dashboard.css";
 
 import Header from "../../components/Header";
 import Title from "../../components/Title";
-import { FiEdit2, FiMessageSquare, FiPlus, FiSearch } from "react-icons/fi";
+import {
+  FiDelete,
+  FiEdit2,
+  FiMessageSquare,
+  FiPlus,
+  FiSearch,
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   limit,
   orderBy,
@@ -16,6 +24,7 @@ import {
 import { db } from "../../config/dbfirebase";
 import { format } from "date-fns";
 import Modal from "../../components/Modal";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
@@ -28,18 +37,17 @@ const Dashboard = () => {
   const [detail, setDetail] = useState();
 
   useEffect(() => {
-    async function loadTickets() {
-      const listRef = collection(db, "tickets");
-      const q = query(listRef, orderBy("created", "desc"), limit(5));
-      setTickets([]);
-      const querySnapshot = await getDocs(q);
-      await updatedState(querySnapshot);
-      setLoading(false);
-    }
-
     loadTickets();
     return () => {};
   }, []);
+  async function loadTickets() {
+    const listRef = collection(db, "tickets");
+    const q = query(listRef, orderBy("created", "desc"), limit(5));
+    setTickets([]);
+    const querySnapshot = await getDocs(q);
+    await updatedState(querySnapshot);
+    setLoading(false);
+  }
 
   async function updatedState(querySnapshot) {
     const isCollectionEmpety = querySnapshot.size === 0;
@@ -81,6 +89,16 @@ const Dashboard = () => {
     await updatedState(querySnapshot);
     setLoading(false);
   };
+
+  async function handleDeleteCall(id) {
+    try {
+      await deleteDoc(doc(db, "tickets", id));
+      toast.success("Call deleted");
+      loadTickets();
+    } catch (err) {
+      toast.error(err);
+    }
+  }
   if (loading) {
     return (
       <div>
@@ -157,6 +175,7 @@ const Dashboard = () => {
                             toggleModal(item);
                           }}
                           className="action"
+                          title="See information"
                           style={{ backgroundColor: "#3583f6" }}
                         >
                           <FiSearch color="#fff" size={17} />
@@ -164,10 +183,19 @@ const Dashboard = () => {
                         <Link
                           to={`/new/${item.id}`}
                           className="action"
+                          title="Edit call"
                           style={{ backgroundColor: "#f6a935" }}
                         >
                           <FiEdit2 color="#fff" size={17} />
                         </Link>
+                        <button
+                          onClick={() => handleDeleteCall(item.id)}
+                          className="action"
+                          title="Delete Call"
+                          style={{ backgroundColor: "#8d2204" }}
+                        >
+                          <FiDelete color="#fff" size={17} />
+                        </button>
                       </td>
                     </tr>
                   );
