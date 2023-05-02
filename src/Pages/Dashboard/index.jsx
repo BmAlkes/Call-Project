@@ -7,11 +7,12 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
-  doc,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
+  startAfter,
 } from "firebase/firestore";
 import { db } from "../../config/dbfirebase";
 import { format } from "date-fns";
@@ -19,9 +20,10 @@ import { format } from "date-fns";
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isEmpty, setIsEmpty] = useState(false);
 
-  console.log(tickets);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [lastDocs, setLastDocs] = useState();
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     async function loadTickets() {
@@ -54,11 +56,29 @@ const Dashboard = () => {
           complement: doc.data().complement,
         });
       });
+      const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
       setTickets((tickets) => [...tickets, ...list]);
+      setLastDocs(lastDoc);
     } else {
       setIsEmpty(true);
     }
+    setLoadingMore(false);
   }
+
+  const handleMore = async () => {
+    setLoadingMore(true);
+
+    const listRef = collection(db, "tickets");
+    const q = query(
+      listRef,
+      orderBy("created", "desc"),
+      startAfter(lastDocs),
+      limit(1)
+    );
+    const querySnapshot = await getDocs(q);
+    await updatedState(querySnapshot);
+    setLoading(false);
+  };
   if (loading) {
     return (
       <div>
@@ -115,7 +135,10 @@ const Dashboard = () => {
                       <td data-label="status">
                         <span
                           className="badge"
-                          style={{ backgroundColor: "#999" }}
+                          style={{
+                            backgroundColor:
+                              item.status === "Open" ? "#5cb85c" : "red",
+                          }}
                         >
                           {item.status}
                         </span>
@@ -140,6 +163,12 @@ const Dashboard = () => {
                 })}
               </tbody>
             </table>
+            {loadingMore && <h3 className="load">Search more tickets....</h3>}
+            {!loadingMore && !isEmpty && (
+              <button onClick={handleMore} className="btn-more">
+                Loading More
+              </button>
+            )}
           </>
         )}
       </div>
