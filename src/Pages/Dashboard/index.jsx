@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   collection,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -25,6 +24,8 @@ const Dashboard = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [lastDocs, setLastDocs] = useState();
   const [loadingMore, setLoadingMore] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [detail, setDetail] = useState();
 
   useEffect(() => {
     async function loadTickets() {
@@ -95,6 +96,11 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  function toggleModal(item) {
+    setShowModal(!showModal);
+    setDetail(item);
+  }
   return (
     <div>
       <Header />
@@ -147,6 +153,9 @@ const Dashboard = () => {
                       <td data-label="register">{item.createdFormat}</td>
                       <td data-label="#">
                         <button
+                          onClick={() => {
+                            toggleModal(item);
+                          }}
                           className="action"
                           style={{ backgroundColor: "#3583f6" }}
                         >
@@ -174,7 +183,9 @@ const Dashboard = () => {
           </>
         )}
       </div>
-      <Modal />
+      {showModal && (
+        <Modal content={detail} close={() => setShowModal(!showModal)} />
+      )}
     </div>
   );
 };

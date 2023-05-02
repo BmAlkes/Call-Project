@@ -1,42 +1,38 @@
+/* eslint-disable react/prop-types */
 import { FiX } from "react-icons/fi";
 import "./modal.css";
 
-const Modal = () => {
+const Modal = ({ content, close }) => {
   return (
     <div className="modal">
       <div className="container">
-        <button className="close">
+        <button className="close" onClick={close}>
           <FiX size={25} color="#fff" />
           back
         </button>
         <main>
-          <h2>Detail Call</h2>
+          <h2>Information Ticket</h2>
           <div className="row">
             <span>
-              Client : <i>Market</i>
+              Client : <i>{content.client}</i>
             </span>
           </div>
           <div className="row">
             <span>
-              Subject : <i>Market</i>
+              Subject : <i>{content.subject}</i>
             </span>
             <span>
-              Registered on : <i>22/2</i>
+              Registered on : <i>{content.createdFormat}</i>
             </span>
           </div>
           <div className="row">
             <span>
-              status : <i>Market</i>
+              status : <i>{content.status}</i>
             </span>
           </div>
           <>
             <h3>Complement</h3>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores
-              repellat ipsa quo laudantium animi provident vitae saepe hic
-              consequuntur officia cum aperiam corporis quibusdam perferendis
-              adipisci ad, veritatis distinctio modi!
-            </p>
+            <p>{content.complement}</p>
           </>
         </main>
       </div>
