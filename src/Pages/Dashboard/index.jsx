@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../config/dbfirebase";
 import { format } from "date-fns";
+import Modal from "../../components/Modal";
 
 const Dashboard = () => {
   const [tickets, setTickets] = useState([]);
@@ -137,7 +138,7 @@ const Dashboard = () => {
                           className="badge"
                           style={{
                             backgroundColor:
-                              item.status === "Open" ? "#5cb85c" : "red",
+                              item.status === "answered" ? "#5cb85c" : "red",
                           }}
                         >
                           {item.status}
@@ -151,12 +152,13 @@ const Dashboard = () => {
                         >
                           <FiSearch color="#fff" size={17} />
                         </button>
-                        <button
+                        <Link
+                          to={`/new/${item.id}`}
                           className="action"
                           style={{ backgroundColor: "#f6a935" }}
                         >
                           <FiEdit2 color="#fff" size={17} />
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   );
@@ -172,6 +174,7 @@ const Dashboard = () => {
           </>
         )}
       </div>
+      <Modal />
     </div>
   );
 };

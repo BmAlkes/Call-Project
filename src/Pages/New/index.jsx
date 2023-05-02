@@ -4,12 +4,23 @@ import Title from "../../components/Title";
 import "./new.css";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../config/dbfirebase";
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 
 const New = () => {
   const { user } = useContext(AuthContext);
+  const { id } = useParams();
+
+  const navigate = useNavigate();
 
   const [customers, setCustomers] = useState([]);
   const [complement, setComplement] = useState("");
@@ -17,6 +28,7 @@ const New = () => {
   const [subject, setSubject] = useState("support");
   const [status, setStatus] = useState("open");
   const [loadCustomers, setLoadCustomers] = useState(true);
+  const [idCustomer, setIdCustomer] = useState(false);
 
   useEffect(() => {
     async function loadCustomers() {
@@ -37,6 +49,10 @@ const New = () => {
           }
           setCustomers(list);
           setLoadCustomers(false);
+          if (id) {
+            loadId(list);
+            setIdCustomer(true);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -45,8 +61,27 @@ const New = () => {
         });
     }
     loadCustomers();
-  }, []);
+  }, [id]);
 
+  const loadId = async (list) => {
+    const docRef = doc(db, "tickets", id);
+    await getDoc(docRef)
+      .then((snapshot) => {
+        setSubject(snapshot.data().subject);
+        setStatus(snapshot.data().status);
+        setComplement(snapshot.data().complement);
+
+        let index = list.findIndex(
+          (item) => item.id === snapshot.data().clientId
+        );
+        setCustomerSelected(index);
+        setIdCustomer(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIdCustomer(false);
+      });
+  };
   const handleOptionChange = (e) => {
     setStatus(e.target.value);
     console.log(e.target.value);
@@ -61,6 +96,24 @@ const New = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (idCustomer) {
+      const docRef = doc(db, "tickets", id);
+      await updateDoc(docRef, {
+        client: customers[customerSelected].company,
+        clientId: customers[customerSelected].id,
+        subject: subject,
+        complement,
+        status,
+        userId: user.uid,
+      }).then(() => {
+        toast.info("Call updated");
+        setCustomerSelected(0);
+        setComplement("");
+        navigate("/dashboard");
+      });
+      return;
+    }
     await addDoc(collection(db, "tickets"), {
       created: new Date(),
       client: customers[customerSelected].company,
@@ -71,9 +124,10 @@ const New = () => {
       userId: user.uid,
     })
       .then(() => {
-        toast.success("register call");
+        toast.success("registered call");
         setComplement("");
         setCustomerSelected(0);
+        navigate("/dashboard");
       })
       .catch((err) => {
         toast.error(err);
@@ -84,7 +138,7 @@ const New = () => {
     <div>
       <Header />
       <div className="content">
-        <Title name="New call">
+        <Title name={id ? "Edit Call" : "New Call"}>
           <FiPlusCircle />
         </Title>
         <div className="container">
@@ -149,7 +203,7 @@ const New = () => {
               onChange={(e) => setComplement(e.target.value)}
             ></textarea>
             <button type="submit" className="submit">
-              Submit
+              {idCustomer ? "Edit Call" : "Create Call"}
             </button>
           </form>
         </div>

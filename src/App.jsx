@@ -49,6 +49,22 @@ const App = () => {
               </Private>
             }
           />
+          <Route
+            path="/new/:id"
+            element={
+              <Private>
+                <New />
+              </Private>
+            }
+          />
+          <Route
+            path="/new"
+            element={
+              <Private>
+                <New />
+              </Private>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
